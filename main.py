@@ -1,11 +1,9 @@
 # import libraries
 # shutil, glob, OS - access files on computer
 # smtplib, SSL - send report over email
-# get-all-tickers - helps compile list of stocks
+
 import yfinance as yf, pandas as pd
 import shutil, os, time, glob, smtplib, ssl
-from functools import reduce
-
 
 ### Extracting stocks of interest 
 
@@ -77,7 +75,6 @@ for file in list_files:
     OBV_value_pos = [stockData.iloc[i,5]/stockData.iloc[i,1] for i in positiveMove]
     OBV_value_neg = [stockData.iloc[i,5]/stockData.iloc[i,1] for i in negativeMove]
     OBV_value = sum(OBV_value_pos) - sum(OBV_value_neg)
-    print(OBV_value) 
     Stock_Name = ((os.path.basename(file)).split(".csv")[0])  # Get the name of the current stock we are analyzing
     OBV_data.append([Stock_Name, OBV_value])  # Add the stock name and OBV value to the new_data list
 
@@ -86,13 +83,3 @@ final_df = pd.DataFrame(OBV_data, columns = ["Ticker", "OBV Value"])
 final_df["Stocks_Ranked"] = final_df["OBV Value"].rank(ascending = False)  # Rank the stocks by their OBV_Values
 final_df.sort_values("OBV Value", inplace = True, ascending = False)  # Sort the ranked stocks
 final_df.to_csv("dailyStockReport\\OBV_Ranked.csv", index = False)  # Save the dataframe to a csv without the index column
-
-
-
-
-
-
-
-
-
-
